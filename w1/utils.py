@@ -2,6 +2,7 @@ from typing import Dict
 import numpy as np
 from typing import Generator, List
 import os
+import csv
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -112,6 +113,9 @@ class DataReader:
         }
         """
     ######################################## YOUR CODE HERE ##################################################
+        with open(self.get_file_path(), 'r') as data:
+            for line in csv.DictReader(data):
+                yield line
 
     ######################################## YOUR CODE HERE ##################################################
 
@@ -121,3 +125,11 @@ class DataReader:
     def get_column_names(self):
         return self._col_names
 
+
+# x = DataReader(fp="/workspace/course-python-4-production/data/tst/2015.csv",
+#                sep=",", col_names=["StockCode", "Description", "UnitPrice", "Quantity", "TotalPrice", "Country", "InvoiceNo", "Date"])
+# z = x.__iter__()
+# zz = list(z)
+# list(map(lambda row: float(
+#     row['TotalPrice']), z))
+# type(z)

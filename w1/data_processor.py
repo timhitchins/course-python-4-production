@@ -1,7 +1,9 @@
+import constants as con
 from typing import List
 from pprint import pprint
 from w1.utils import Stats, DataReader
 from tqdm import tqdm
+from functools import reduce
 import os
 
 
@@ -15,7 +17,8 @@ class DataProcessor:
         self._n_rows = 0
 
         self._set_col_names()
-        self.data_reader = DataReader(fp=file_path, sep=self._sep, col_names=self._col_names)
+        self.data_reader = DataReader(
+            fp=file_path, sep=self._sep, col_names=self._col_names)
         self._set_n_rows()
 
     @staticmethod
@@ -79,5 +82,19 @@ class DataProcessor:
         aggregate should be 105.58
         """
         ######################################## YOUR CODE HERE ##################################################
+        # call __iter__  on data_reader object (implicitly) and get generator
+        data_reader_gen = (row for row in self.data_reader)
+        vals_to_agg = map(lambda row: self.to_float(
+            row[column_name]), data_reader_gen)
 
+        aggregate = reduce(lambda x, y: x + y, vals_to_agg)
+        return aggregate
         ######################################## YOUR CODE HERE ##################################################
+
+
+# con.SeedDataColNames.__dict__.values()
+# dp = DataProcessor(file_path="./data/tst/2016.csv")
+# dp.describe([
+#     'TotalPrice'])
+# agg = dp.aggregate('TotalPrice')
+# agg

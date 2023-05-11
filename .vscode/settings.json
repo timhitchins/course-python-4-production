@@ -1,0 +1,8 @@
+{
+    "python.testing.pytestArgs": [
+        "w1"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.formatting.provider": "autopep8"
+}
