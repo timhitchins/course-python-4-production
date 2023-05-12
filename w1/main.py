@@ -7,6 +7,7 @@ import os
 import argparse
 from global_utils import get_file_name, make_dir, plot_sales_data
 from datetime import datetime
+from functools import reduce
 import json
 
 
@@ -44,8 +45,26 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     }
     """
     ######################################## YOUR CODE HERE ##################################################
+    data_reader_gen = (row for row in dp.data_reader)
+    _ = next(data_reader_gen)
+    # set comprehension
+    regions = sorted({row["Country"] for row in data_reader_gen})
+    pprint(list(regions))
 
+    # Empty dict to fill
+    reg_dict = {}
+
+    # generate aggregate for each region
+    for reg in regions:
+        filt = filter(lambda x: x['Country'] == reg, dp.data_reader)
+        reg_vals = map(lambda x: dp.to_float(x["TotalPrice"]), filt)
+        aggregate = reduce(lambda x, y: x + y, reg_vals)
+        reg_dict[reg] = aggregate
+    return reg_dict
     ######################################## YOUR CODE HERE ##################################################
+
+
+# revenue_per_region(DataProcessor(file_path="./data/tst/2016.csv"))
 
 
 def get_sales_information(file_path: str) -> Dict:
@@ -53,7 +72,8 @@ def get_sales_information(file_path: str) -> Dict:
     dp = DataProcessor(file_path=file_path)
 
     # print stats
-    dp.describe(column_names=[constants.OutDataColNames.UNIT_PRICE, constants.OutDataColNames.TOTAL_PRICE])
+    dp.describe(column_names=[
+                constants.OutDataColNames.UNIT_PRICE, constants.OutDataColNames.TOTAL_PRICE])
 
     # return total revenue and revenue per region
     return {
@@ -64,21 +84,25 @@ def get_sales_information(file_path: str) -> Dict:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Choose from one of these : [tst|sml|bg]")
+    parser = argparse.ArgumentParser(
+        description="Choose from one of these : [tst|sml|bg]")
     parser.add_argument('--type',
                         default='tst',
                         choices=['tst', 'sml', 'bg'],
                         help='Type of data to generate')
     args = parser.parse_args()
 
-    data_folder_path = os.path.join(CURRENT_FOLDER_NAME, '..', constants.DATA_FOLDER_NAME, args.type)
-    files = [str(file) for file in os.listdir(data_folder_path) if str(file).endswith('csv')]
+    data_folder_path = os.path.join(
+        CURRENT_FOLDER_NAME, '..', constants.DATA_FOLDER_NAME, args.type)
+    files = [str(file) for file in os.listdir(
+        data_folder_path) if str(file).endswith('csv')]
 
     output_save_folder = os.path.join(CURRENT_FOLDER_NAME, '..', 'output', args.type,
                                       datetime.now().strftime("%B %d %Y %H-%M-%S"))
     make_dir(output_save_folder)
 
-    file_paths = [os.path.join(data_folder_path, file_name) for file_name in files]
+    file_paths = [os.path.join(data_folder_path, file_name)
+                  for file_name in files]
     revenue_data = [get_sales_information(file_path)
                     for file_path in file_paths]
 
@@ -94,4 +118,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

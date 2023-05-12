@@ -94,6 +94,6 @@ class DataProcessor:
 
 
 # Testing
-dp = DataProcessor(file_path="./data/tst/2016.csv")
-dp.describe(["TotalPrice"])
-dp.aggregate('TotalPrice')
+# dp = DataProcessor(file_path="./data/tst/2016.csv")
+# dp.describe(["TotalPrice"])
+# dp.aggregate('TotalPrice')
