@@ -2,7 +2,7 @@ from typing import Dict
 import numpy as np
 from typing import Generator, List
 import os
-import csv
+# import csv
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -113,9 +113,13 @@ class DataReader:
         }
         """
     ######################################## YOUR CODE HERE ##################################################
-        with open(self.get_file_path(), 'r') as data:
-            for line in csv.DictReader(data):
-                yield line
+
+        # Without csv.DictReader
+        data = open(self.get_file_path(), 'r')
+        data_reader_gen = (row.strip("\n").split(",") for row in data)
+
+        for row in data_reader_gen:
+            yield {key: value for key, value in zip(self._col_names, row)}
 
     ######################################## YOUR CODE HERE ##################################################
 
@@ -126,10 +130,9 @@ class DataReader:
         return self._col_names
 
 
-# x = DataReader(fp="/workspace/course-python-4-production/data/tst/2015.csv",
+# Testing:
+# dr = DataReader(fp="/workspace/course-python-4-production/data/tst/2015.csv",
 #                sep=",", col_names=["StockCode", "Description", "UnitPrice", "Quantity", "TotalPrice", "Country", "InvoiceNo", "Date"])
-# z = x.__iter__()
-# zz = list(z)
-# list(map(lambda row: float(
-#     row['TotalPrice']), z))
-# type(z)
+# data_reader_gen = dr.__iter__()
+# for row in list(data_reader_gen)[1:10]:
+#     print(row)

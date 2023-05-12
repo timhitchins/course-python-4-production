@@ -84,6 +84,7 @@ class DataProcessor:
         ######################################## YOUR CODE HERE ##################################################
         # call __iter__  on data_reader object (implicitly) and get generator
         data_reader_gen = (row for row in self.data_reader)
+        _ = next(data_reader_gen)
         vals_to_agg = map(lambda row: self.to_float(
             row[column_name]), data_reader_gen)
 
@@ -92,9 +93,7 @@ class DataProcessor:
         ######################################## YOUR CODE HERE ##################################################
 
 
-# con.SeedDataColNames.__dict__.values()
-# dp = DataProcessor(file_path="./data/tst/2016.csv")
-# dp.describe([
-#     'TotalPrice'])
-# agg = dp.aggregate('TotalPrice')
-# agg
+# Testing
+dp = DataProcessor(file_path="./data/tst/2016.csv")
+dp.describe(["TotalPrice"])
+dp.aggregate('TotalPrice')
