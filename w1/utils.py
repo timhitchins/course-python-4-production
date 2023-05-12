@@ -117,7 +117,6 @@ class DataReader:
         # Without csv.DictReader
         data = open(self.get_file_path(), 'r')
         data_reader_gen = (row.strip("\n").split(",") for row in data)
-
         for row in data_reader_gen:
             yield {key: value for key, value in zip(self._col_names, row)}
 

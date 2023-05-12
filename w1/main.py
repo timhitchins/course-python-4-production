@@ -46,7 +46,7 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     """
     ######################################## YOUR CODE HERE ##################################################
     data_reader_gen = (row for row in dp.data_reader)
-    _ = next(data_reader_gen)
+    next(data_reader_gen)
     # set comprehension
     regions = sorted({row["Country"] for row in data_reader_gen})
     pprint(list(regions))
