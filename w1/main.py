@@ -7,7 +7,6 @@ import os
 import argparse
 from global_utils import get_file_name, make_dir, plot_sales_data
 from datetime import datetime
-from functools import reduce
 import json
 
 
@@ -47,24 +46,17 @@ def revenue_per_region(dp: DataProcessor) -> Dict:
     ######################################## YOUR CODE HERE ##################################################
     data_reader_gen = (row for row in dp.data_reader)
     next(data_reader_gen)
-    # set comprehension
-    regions = sorted({row["Country"] for row in data_reader_gen})
-    pprint(list(regions))
 
     # Empty dict to fill
     reg_dict = {}
-
-    # generate aggregate for each region
-    for reg in regions:
-        filt = filter(lambda x: x['Country'] == reg, dp.data_reader)
-        reg_vals = map(lambda x: dp.to_float(x["TotalPrice"]), filt)
-        aggregate = reduce(lambda x, y: x + y, reg_vals)
-        reg_dict[reg] = aggregate
+    # generate aggregate for each country
+    for row in data_reader_gen:
+        country = row["Country"]
+        if country in reg_dict.keys():
+            reg_dict[country] += dp.to_float(row["TotalPrice"])
+        else:
+            reg_dict[country] = dp.to_float(row["TotalPrice"])
     return reg_dict
-    ######################################## YOUR CODE HERE ##################################################
-
-
-# revenue_per_region(DataProcessor(file_path="./data/tst/2016.csv"))
 
 
 def get_sales_information(file_path: str) -> Dict:

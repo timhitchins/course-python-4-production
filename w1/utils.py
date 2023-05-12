@@ -2,7 +2,6 @@ from typing import Dict
 import numpy as np
 from typing import Generator, List
 import os
-# import csv
 
 CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -113,10 +112,12 @@ class DataReader:
         }
         """
     ######################################## YOUR CODE HERE ##################################################
-
-        # Without csv.DictReader
+        # Open file for reading
         data = open(self.get_file_path(), 'r')
+        # cleaned up generator
         data_reader_gen = (row.strip("\n").split(",") for row in data)
+
+        # return generator of dictionaris
         for row in data_reader_gen:
             yield {key: value for key, value in zip(self._col_names, row)}
 
@@ -127,11 +128,3 @@ class DataReader:
 
     def get_column_names(self):
         return self._col_names
-
-
-# Testing:
-# dr = DataReader(fp="/workspace/course-python-4-production/data/tst/2015.csv",
-#                sep=",", col_names=["StockCode", "Description", "UnitPrice", "Quantity", "TotalPrice", "Country", "InvoiceNo", "Date"])
-# data_reader_gen = dr.__iter__()
-# for row in list(data_reader_gen)[1:10]:
-#     print(row)

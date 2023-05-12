@@ -91,9 +91,3 @@ class DataProcessor:
         aggregate = reduce(lambda x, y: x + y, vals_to_agg)
         return aggregate
         ######################################## YOUR CODE HERE ##################################################
-
-
-# Testing
-# dp = DataProcessor(file_path="./data/tst/2015.csv")
-# dp.describe(["TotalPrice"])
-# dp.aggregate('TotalPrice')
