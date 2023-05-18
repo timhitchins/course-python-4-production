@@ -9,12 +9,14 @@ from global_utils import make_dir
 
 class DB:
     def __init__(self, db_name: str = "database.sqlite") -> None:
-        self._db_save_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'database')
+        self._db_save_path = os.path.join(os.path.dirname(
+            os.path.abspath(__file__)), '..', '..', 'database')
         make_dir(self._db_save_path)
         self._connection = sqlite3.connect(os.path.join(self._db_save_path, db_name),
                                            check_same_thread=False)
         self._table_name = 'processes'
-        self._col_order = ['process_id', 'file_name', 'file_path', 'description', 'start_time', 'end_time', 'percentage']
+        self._col_order = ['process_id', 'file_name', 'file_path',
+                           'description', 'start_time', 'end_time', 'percentage']
 
         self.create_table()
 
@@ -45,6 +47,24 @@ class DB:
         Read more about datatypes in Sqlite here -> https://www.sqlite.org/datatype3.html
         """
     ######################################## YOUR CODE HERE ##################################################
+        self._connection.execute(
+            f"DROP TABLE IF EXISTS {self._table_name}"
+        )
+        # I added file path here???
+        self._connection.execute(
+            f"""
+                CREATE TABLE IF NOT EXISTS {self._table_name}
+                 (
+                     process_id TEXT NOT NULL,
+                     file_name TEXT DEFAULT VALUE NULL,
+                     file_path TEXT NOT NULL,
+                     description TEXT DEFAULT VALUE NULL,
+                     start_time TEXT NOT NULL,
+                     end_time TEXT DEFAULT VALUE NULL,
+                     percentage REAL DEFAULT VALUE NULL
+                 )    
+                 """)
+        self._connection.commit()
 
     ######################################## YOUR CODE HERE ##################################################
 
@@ -63,7 +83,34 @@ class DB:
         :return: None
         """
     ######################################## YOUR CODE HERE ##################################################
+        # Insert a record into the table
+        # c.execute("INSERT INTO users (name, email) VALUES (?, ?)", ("Alice", "alice@example.com"))
 
+        self._connection.execute(
+            f"""
+                INSERT INTO {self._table_name}
+                 (
+                     process_id,
+                     start_time,
+                     file_name,
+                     file_path,
+                     description,
+                     end_time,
+                     percentage
+                 ) VALUES 
+                 (
+                   ?, ?, ?, ?, ?, ?, ?  
+                 )   
+                 """, (
+                process_id,
+                start_time,
+                file_name,
+                file_path,
+                description,
+                end_time,
+                percentage
+            ))
+        self._connection.commit()
     ######################################## YOUR CODE HERE ##################################################
 
     def read_all(self) -> List[Dict]:
@@ -71,7 +118,8 @@ class DB:
         cursor = self._connection.execute(f'''SELECT {",".join(self._col_order)}
                                               FROM {self._table_name}''')
         for row in cursor.fetchall():
-            row_dict = {col_name: row[ind] for ind, col_name in enumerate(self._col_order)}
+            row_dict = {col_name: row[ind]
+                        for ind, col_name in enumerate(self._col_order)}
             time_taken = self.calculate_time_taken(start_time=row_dict['start_time'], end_time=row_dict['end_time'],
                                                    datetime_fmt='%Y-%m-%d %H:%M:%S')
             row_dict['time_taken'] = time_taken
@@ -97,5 +145,3 @@ class DB:
     ######################################## YOUR CODE HERE ##################################################
 
     ######################################## YOUR CODE HERE ##################################################
-
-
