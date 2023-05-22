@@ -47,23 +47,21 @@ class DB:
         Read more about datatypes in Sqlite here -> https://www.sqlite.org/datatype3.html
         """
     ######################################## YOUR CODE HERE ##################################################
-        self._connection.execute(
-            f"DROP TABLE IF EXISTS {self._table_name}"
-        )
-        # I added file path here???
+
+        # I added file path here not in the docstring
         self._connection.execute(
             f"""
                 CREATE TABLE IF NOT EXISTS {self._table_name}
                  (
                      process_id TEXT NOT NULL,
-                     file_name TEXT DEFAULT VALUE NULL,
+                     file_name TEXT DEFAULT NULL,
                      file_path TEXT NOT NULL,
-                     description TEXT DEFAULT VALUE NULL,
+                     description TEXT DEFAULT NULL,
                      start_time TEXT NOT NULL,
-                     end_time TEXT DEFAULT VALUE NULL,
-                     percentage REAL DEFAULT VALUE NULL
+                     end_time TEXT DEFAULT NULL,
+                     percentage REAL DEFAULT NULL
                  )    
-                 """)
+            """)
         self._connection.commit()
 
     ######################################## YOUR CODE HERE ##################################################
@@ -83,8 +81,6 @@ class DB:
         :return: None
         """
     ######################################## YOUR CODE HERE ##################################################
-        # Insert a record into the table
-        # c.execute("INSERT INTO users (name, email) VALUES (?, ?)", ("Alice", "alice@example.com"))
 
         self._connection.execute(
             f"""
@@ -143,5 +139,10 @@ class DB:
         :return: None
         """
     ######################################## YOUR CODE HERE ##################################################
+        self._connection.execute(f"""
+                                    UPDATE {self._table_name} SET percentage='{percentage}'
+                                     WHERE process_id='{process_id}';
+                                """)
 
+        self._connection.commit()
     ######################################## YOUR CODE HERE ##################################################

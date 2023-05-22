@@ -63,7 +63,7 @@
             function addRow(row){
                 $('#process-table').DataTable().row.add([row.process_id, row.file_name, row.file_path,
                                                          row.description, row.start_time, row.end_time,
-                                                         row.time_taken, (row.percentage).toFixed(2)]).draw(false);
+                                                         row.time_taken, (row.percentage)]).draw(false);
             }
         </script>
     </body>

@@ -58,7 +58,7 @@ async def get() -> HTMLResponse:
         html = f.read()
 
     # Render an HTML page
-    return HTMLResponse(html)
+    return HTMLResponse(html, status_code=200)
     ######################################## YOUR CODE HERE ##################################################
 
 
@@ -71,8 +71,5 @@ async def get() -> List[ProcessStatus]:
     ######################################## YOUR CODE HERE ##################################################
     db = DB()
     processes = db.read_all()
-    print(processes)
-    # create table if not exists TableName (col1 typ1, ..., colN typN)# create a table
     return [ProcessStatus(**proc) for proc in processes]
-
     ######################################## YOUR CODE HERE ##################################################
