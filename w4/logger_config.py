@@ -20,31 +20,26 @@ class Logger:
         # Create formatters and add it to handlers
         ######################################## YOUR CODE HERE ##################################################
         # set the logging formatter to the f_handler
-        ######################################## YOUR CODE HERE ##################################################
+        self.f_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s") # can change format here
+        self.f_handler.setFormatter(self.f_format)
 
-        ######################################## YOUR CODE HERE ##################################################
         # Add handlers to the logger and setlevel to DEBUG
-        ######################################## YOUR CODE HERE ##################################################
+        self.logger.addHandler(self.f_handler)
+        self.logger.setLevel(logging.DEBUG)
+
 
     def warning(self, msg):
-        pass
-        ######################################## YOUR CODE HERE ##################################################
-        ######################################## YOUR CODE HERE ##################################################
+        self.logger.warning(msg)
+
 
     def error(self, msg):
-        pass
-        ######################################## YOUR CODE HERE ##################################################
-        ######################################## YOUR CODE HERE ##################################################
+        self.logger.error(msg)
 
     def info(self, msg):
-        pass
-        ######################################## YOUR CODE HERE ##################################################
-        ######################################## YOUR CODE HERE ##################################################
+        self.logger.info(msg)
 
     def debug(self, msg):
-        pass
-        ######################################## YOUR CODE HERE ##################################################
-        ######################################## YOUR CODE HERE ##################################################
+        self.logger.debug(msg)
 
 
 server_logger = Logger(log_file_name='server_logs.txt', module_name='server_logs')
